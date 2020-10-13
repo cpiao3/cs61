@@ -2,7 +2,7 @@ package synthesizer;
 
 import java.util.Iterator;
 
-public class ArrayRingBuffer<T> implements BoundedQueue<T> {
+public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> implements BoundedQueue<T> {
     private int first;
     private int last;
     private int fillCount;

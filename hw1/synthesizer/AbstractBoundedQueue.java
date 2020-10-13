@@ -2,7 +2,7 @@ package synthesizer;
 
 public abstract class AbstractBoundedQueue<T> implements BoundedQueue<T>{
     protected int fillCount;
-    protected int capacity;
+    protected int size;
     @Override
     public abstract T peek();
     @Override
@@ -13,8 +13,5 @@ public abstract class AbstractBoundedQueue<T> implements BoundedQueue<T>{
     public abstract int capacity();
     @Override
     public abstract int fillCount();
-    @Override
-    public abstract boolean isEmpty();
-    @Override
-    public abstract boolean isFull();
+
 }

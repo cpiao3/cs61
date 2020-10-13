@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 public class TestArrayRingBuffer {
     @Test
     public void someTest() {
+        AbstractBoundedQueue<Integer> b2 = new ArrayRingBuffer<Integer>(100);
             ArrayRingBuffer<Integer> ls = new ArrayRingBuffer(7);
             ArrayRingBuffer<Integer> ls2 = new ArrayRingBuffer(7);
             ls.enqueue(1);
