@@ -61,6 +61,9 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> implements Bound
 
     @Override
     public T peek() {
+        if (fillCount == 0){
+            throw new RuntimeException();
+        }
         T a = rb[first];
         return a;
     }
