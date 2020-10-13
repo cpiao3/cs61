@@ -25,7 +25,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> implements Bound
     @Override
     public void enqueue(T x) {
         if (fillCount == size){
-            throw new RuntimeException("Ring Buffer overflow");
+            throw new RuntimeException("Ring Buffer Overflow");
         }
         int middle = Math.round(size/ 2);
         if(fillCount == 0){
@@ -50,7 +50,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> implements Bound
     @Override
     public T dequeue() {
         if (fillCount == 0){
-            throw new RuntimeException("Ring Buffer underflow");
+            throw new RuntimeException("Ring Buffer Underflow");
         }
         T a = rb[first];
         rb[first] = null;
@@ -84,11 +84,12 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> implements Bound
             return false;
         }
         int count = this.first;
+        int count2 = b.first;
         for (int i = 0;i<this.capacity();i++){
             if (count == this.capacity()){
                 count = 0;
             }
-            if (this.peek(count) != b.peek(count)){
+            if (this.peek(count) != b.peek(count2)){
                 return false;
             }
             count ++;
@@ -113,13 +114,15 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> implements Bound
 
     private class iterator implements Iterator<T> {
         private int pos;
+        private int size2 = fillCount;
 
         public iterator(){
             pos = first;
         }
         @Override
         public boolean hasNext(){
-            return fillCount>0;
+            size2--;
+            return size2>=0;
 
         }
         @Override
