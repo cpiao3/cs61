@@ -34,19 +34,16 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> implements Bound
             last = middle+1;
             fillCount++;
         } else {
-            rb[last] = x;
-            last++;
-            fillCount++;
             if (last == size) {
                 last = 0;
             }
+            rb[last] = x;
+            last++;
+            fillCount++;
+
         }
     }
 
-    /**
-     * Dequeue oldest item in the ring buffer. If the buffer is empty, then
-     * throw new RuntimeException("Ring buffer underflow").
-     */
     @Override
     public T dequeue() {
         if (fillCount == 0){
@@ -62,10 +59,6 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> implements Bound
         return a;
     }
 
-    /**
-     * Return oldest item, but don't remove it. If the buffer is empty, then
-     * throw new RuntimeException("Ring buffer underflow").
-     */
     @Override
     public T peek() {
         T a = rb[first];

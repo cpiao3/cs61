@@ -9,20 +9,13 @@ import static org.junit.Assert.*;
 public class TestArrayRingBuffer {
     @Test
     public void someTest() {
-        AbstractBoundedQueue<Integer> b2 = new ArrayRingBuffer<Integer>(10);
-
-        b2.enqueue(3);
-        b2.enqueue(2);
-        b2.enqueue(3);
+        AbstractBoundedQueue<Integer> b2 = new ArrayRingBuffer<Integer>(2);
         b2.enqueue(1);
-        b2.enqueue(6);
         b2.enqueue(1);
-        b2.enqueue(5);
-        b2.enqueue(6);
+        b2.dequeue();
+        b2.dequeue();
 
-        for (int i : b2){
-            System.out.println(i);
-        }
+
 
 
 
