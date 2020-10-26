@@ -46,13 +46,7 @@ public class RandomWorldDemo {
     }
 
     public static void main(String[] args) {
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
 
-        TETile[][] randomTiles = new TETile[WIDTH][HEIGHT];
-        fillWithRandomTiles(randomTiles);
-
-        ter.renderFrame(randomTiles);
     }
 
 
