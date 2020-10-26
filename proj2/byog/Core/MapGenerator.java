@@ -6,11 +6,11 @@ import byog.TileEngine.Tileset;
 import java.util.Random;
 
 public class MapGenerator {
-    public static int seed;
+    public static long seed;
     public static int lengthone;
     public static int lengthtwo;
     public static TETile[][] world;
-    public static void MapGenerator(TETile[][] c,int a) {
+    public static void MapGenerator(TETile[][] c,long a) {
         world = c;
         seed = a;
         lengthone = world.length;

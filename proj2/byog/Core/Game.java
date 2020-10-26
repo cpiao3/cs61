@@ -29,14 +29,14 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
         String string = "";
-        int seed = 0;
+        long seed = 0;
         for (int i = 0;i<input.length();i++){
             if ((int)input.charAt(i)<=57&&(int)input.charAt(i)>=48){
                 string += input.charAt(i);
             }
         }
         if (!string.isEmpty()){
-            seed = Integer.parseInt(string);
+            seed = Long.parseLong(string);
         }
 
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
