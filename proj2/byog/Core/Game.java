@@ -7,8 +7,6 @@ public class Game {
     TERenderer ter = new TERenderer();
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    public static final TETile[][] world = new TETile[WIDTH][HEIGHT];
-
 
     public void playWithKeyboard() {
     }
@@ -36,7 +34,8 @@ public class Game {
         if (!string.isEmpty()){
             seed = Long.parseLong(string);
         }
-
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+        MapGenerator.MapGenerator(world,seed);
         return world;
     }
 }

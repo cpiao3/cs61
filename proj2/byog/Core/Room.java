@@ -25,14 +25,14 @@ public class Room extends MapGenerator {
             Room a = new Room(locationX, locationY);
             first = a;
         }
-        first.draw();
+        draw(first);
     }
 
-    private void draw() {
-        Room pointer = this;
+    private static void draw(Room first) {
+        Room pointer = first;
         Random r = new Random(seed);
         while (pointer != null) {
-            Room compare = this;
+            Room compare = first;
             int e = 1 + r.nextInt(7);
             int d = 1 + r.nextInt(7);
             while (compare != null) {
@@ -59,7 +59,7 @@ public class Room extends MapGenerator {
                 }
                 compare = compare.next;
                 if (compare == null) {
-                    pointer.drawselectroom(e, d);
+                    drawselectroom(pointer, e, d);
                 }
             }
             pointer = pointer.next;
@@ -76,14 +76,14 @@ public class Room extends MapGenerator {
         pointer.y = 0;
     }
 
-    private void drawselectroom(int e, int d) {
-        this.xlength = e + 1;
-        this.ylength = d + 1;
+    private static void drawselectroom(Room pointer, int e, int d) {
+        pointer.xlength = e + 1;
+        pointer.ylength = d + 1;
         for (int i = 0; i <= e; i++) {
             for (int b = 0; b <= d; b++) {
-                world[this.x + i][this.y + b] = Tileset.FLOOR;
+                world[pointer.x + i][pointer.y + b] = Tileset.FLOOR;
             }
-            this.existence = true;
+            pointer.existence = true;
         }
     }
 
@@ -129,23 +129,19 @@ public class Room extends MapGenerator {
             }
             first = pointer;
         }
-            while (pointer != null) {
-                if (!pointer.existence) {
-                    while (!pointer.existence) {
-                        pointer = pointer.next;
-                        if (pointer == null){
-                            break;
-                        }
-                    }
-                    pointer2.next = pointer;
-                } else {
-                    pointer2 = pointer;
+        while (pointer != null) {
+            if (!pointer.existence) {
+                while (!pointer.existence) {
                     pointer = pointer.next;
+                    if (pointer == null) {
+                        break;
+                    }
                 }
+                pointer2.next = pointer;
+            } else {
+                pointer2 = pointer;
+                pointer = pointer.next;
             }
-
-
+        }
     }
-
 }
-

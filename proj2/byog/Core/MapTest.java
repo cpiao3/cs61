@@ -17,7 +17,7 @@ public class MapTest {
         ter.initialize(80,30);
 
         TETile[][] randomTiles = new TETile[80][30];
-        MapGenerator a = new MapGenerator(randomTiles,14);
+        MapGenerator.MapGenerator(randomTiles,32662);
         ter.renderFrame(randomTiles);
 
     }
