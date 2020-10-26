@@ -21,9 +21,9 @@ public class MapGenerator extends Game{
 
     public static void Hallways_and_Rooms(){
         Random r = new Random(seed);
-        int c =r.nextInt(); ;
-        while ( c<8||c>20)
-            { c = r.nextInt();}
+        int c =r.nextInt(20); ;
+        while (c<8)
+            { c = r.nextInt(20);}
         Room.roommaker(c);
     }
 }
