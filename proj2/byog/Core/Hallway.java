@@ -19,6 +19,9 @@ public class Hallway extends MapGenerator {
     }
 
     public static void connect(Room rooms) {
+        if (first != null){
+            first =null;
+        }
         Room pointer = rooms;
         while (pointer.next != null) {
             Xhallwaymaker(pointer, pointer.next);

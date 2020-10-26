@@ -18,6 +18,9 @@ public class Room extends MapGenerator {
     }
 
     public static void roommaker(int number) {
+        if (first!=null){
+            first = null;
+        }
         Random r = new Random(number);
         for (int i = 0; i < number; i++) {
             int locationX = r.nextInt(WIDTH - 8);

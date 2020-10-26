@@ -14,11 +14,12 @@ import static org.junit.Assert.*;
 public class MapTest {
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
-        ter.initialize(80,30);
+        Game game = new Game();
+        TETile[][] world = game.playWithInputString("n5197880843569031643s");
+        System.out.println(TETile.toString(world));
+        TETile[][] world2 = game.playWithInputString("n5197880843569031643s");
+        System.out.println(TETile.toString(world2));
 
-        TETile[][] randomTiles = new TETile[80][30];
-        MapGenerator.MapGenerator(randomTiles,32662);
-        ter.renderFrame(randomTiles);
 
     }
 
