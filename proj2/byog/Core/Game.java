@@ -136,9 +136,7 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
-        // and return a 2D tile representation of the world that would have been
-        // drawn if the same inputs had been given to playWithKeyboard().
+
         boolean gameOver = false;
         Long seed = -1L;
         if(input.toLowerCase().contains("n") && input.toLowerCase().contains("s")){
@@ -152,7 +150,7 @@ public class Game {
         }
 
         setSeed(seed);
-        ter.initialize(WIDTH, HEIGHT);
+
         TETile[][] randomWorld = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -171,7 +169,7 @@ public class Game {
 
             setRooms(randomWorld);
             setPlayer(randomWorld);
-            ter.renderFrame(randomWorld);
+
 
             while(StdDraw.hasNextKeyTyped()){
                 processInput(randomWorld, StdDraw.nextKeyTyped());
