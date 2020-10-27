@@ -1,5 +1,5 @@
 package byog.TileEngine;
-
+import java.io.*;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Random;
@@ -21,7 +21,7 @@ import byog.Core.RandomUtils;
  * to make your TETile class mutable, if you prefer.
  */
 
-public class TETile {
+public class TETile implements Serializable{
     private final char character; // Do not rename character or the autograder will break.
     private final Color textColor;
     private final Color backgroundColor;

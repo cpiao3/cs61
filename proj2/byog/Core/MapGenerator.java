@@ -24,9 +24,9 @@ public class MapGenerator extends Game{
         int c =r.nextInt(20); ;
         while (c<8)
             { c = r.nextInt(20);}
-
         Room.roommaker(c);
 
     }
+
 }
 

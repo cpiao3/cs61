@@ -1,4 +1,5 @@
 package byog.Core;
+import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import java.util.Random;
@@ -11,6 +12,9 @@ public class Room extends MapGenerator {
     public Room next;
     public static Room first;
 
+    public Room(){
+        ;
+    }
     public Room(int a, int b) {
         x = a;
         y = b;
@@ -24,7 +28,7 @@ public class Room extends MapGenerator {
         Random r = new Random(number);
         for (int i = 0; i < number; i++) {
             int locationX = r.nextInt(WIDTH - 8);
-            int locationY = r.nextInt(HEIGHT - 8);
+            int locationY = r.nextInt(HEIGHT - 9);
             Room a = new Room(locationX, locationY);
             first = a;
         }
@@ -37,7 +41,7 @@ public class Room extends MapGenerator {
         while (pointer != null) {
             Room compare = first;
             int e = 1 + r.nextInt(7);
-            int d = 1 + r.nextInt(7);
+            int d = 1 + r.nextInt(6);
             while (compare != null) {
                 if (pointer != compare) {
                     if ((pointer.x + e >= compare.x && pointer.x + e <= compare.x + compare.xlength) && (pointer.y + d >= compare.y && pointer.y + d <= compare.y + compare.ylength)) {
@@ -68,9 +72,7 @@ public class Room extends MapGenerator {
             pointer = pointer.next;
         }
         refactor();
-        roomwall(first);
-        Hallway.connect(first);
-
+        roomwall();
 
     }
 
@@ -91,8 +93,8 @@ public class Room extends MapGenerator {
     }
 
 
-    private static void roomwall(Room rooms) {
-        Room pointer = rooms;
+    private static void roomwall() {
+        Room pointer = first;
         while (pointer != null) {
             drawroomwall(pointer);
             pointer = pointer.next;
@@ -121,17 +123,17 @@ public class Room extends MapGenerator {
                 }
             }
         }
+        Hallway.connect(first);
     }
 
     private static void refactor() {
         Room pointer = first;
         Room pointer2 = first;
-        if (!first.existence) {
-            while (!pointer.existence) {
-                pointer = pointer.next;
-            }
-            first = pointer;
+
+        while (pointer.existence == false) {
+            pointer = pointer.next;
         }
+        first = pointer;
         while (pointer != null) {
             if (!pointer.existence) {
                 while (!pointer.existence) {
@@ -146,5 +148,19 @@ public class Room extends MapGenerator {
                 pointer = pointer.next;
             }
         }
+    }
+    public static int[] player(){
+        Room pointer = first;
+        int[] a= new int[4];
+        world[pointer.x+1][pointer.y+1] = Tileset.PLAYER;
+        a[0]=pointer.x+1;
+        a[1]=pointer.y+1;
+        while (pointer.next != null){
+            pointer = pointer.next;
+        }
+        world[pointer.x][pointer.y+1] = Tileset.LOCKED_DOOR;
+        a[2]=pointer.x+pointer.xlength;
+        a[3]=pointer.y+pointer.ylength-1;
+        return a;
     }
 }

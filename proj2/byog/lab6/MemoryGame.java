@@ -47,8 +47,13 @@ public class MemoryGame {
     }
 
     public String generateRandomString(int n) {
-        //TODO: Generate random string of letters of length n
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        while (sb.length() < n) {
+            sb.append(CHARACTERS[rand.nextInt(CHARACTERS.length)]);
+        }
+
+        return sb.toString();
     }
 
     public void drawFrame(String s) {
