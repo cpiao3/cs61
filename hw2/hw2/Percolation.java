@@ -33,9 +33,9 @@ public class Percolation {
                 }
             } else {
                 perc[col][row] = true;
-                opensites++;
                 connect(row, col);
             }
+            opensites++;
         }
     }
     public boolean isOpen(int row, int col){
