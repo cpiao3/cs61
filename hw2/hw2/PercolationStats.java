@@ -9,8 +9,8 @@ public class PercolationStats {
     public PercolationStats(int N, int T, PercolationFactory pf){
         experiment_num = T;
         t = new double[T];
-        Percolation perc = pf.make(N);
         for (int i = 0;i<T;i++){
+            Percolation perc = pf.make(N);
             while (!perc.percolates()){
                 int row = StdRandom.uniform(N);
                 int col = StdRandom.uniform(N);

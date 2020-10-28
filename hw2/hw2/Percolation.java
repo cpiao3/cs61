@@ -32,10 +32,10 @@ public class Percolation {
                 set.union(top, index(row, col));
                 tract.union(top,index(row, col));
                 connect(row, col);
-            } else if (row == perc.length - 1) {
+            } if (row == perc.length - 1) {
                 perc[col][row] = true;
-                connect(row, col);
                 set.union(bottom, index(row, col));
+                connect(row, col);
             } else {
                 perc[col][row] = true;
                 connect(row, col);
