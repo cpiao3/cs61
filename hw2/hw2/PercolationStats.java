@@ -6,6 +6,8 @@ public class PercolationStats {
     public double[] t;
     public double mean;
     public double Std;
+    double confidencelow=0;
+    double confidencehigh=0;
 
     public PercolationStats(int N, int T, PercolationFactory pf) {
         if (N<=0||T<=0){
@@ -37,19 +39,27 @@ public class PercolationStats {
     }
 
     public double confidenceLow() {
-        double confidencelow = mean - ((1.96 * Std) / Math.sqrt(experiment_num));
+        if (confidencelow==0) {
+            confidencelow = mean - ((1.96 * Std) / Math.sqrt(experiment_num));
+        }
         return confidencelow;
     }
 
     public double confidenceHigh() {
-        double confidencehigh = mean + ((1.96 * Std) / Math.sqrt(experiment_num));
+        if (confidencehigh==0) {
+            confidencehigh = mean + ((1.96 * Std) / Math.sqrt(experiment_num));
+        }
         return confidencehigh;
     }
 
     public static void main(String arg[]) {
         PercolationFactory pf = new PercolationFactory();
         PercolationStats a = new PercolationStats(20, 10, pf);
+        System.out.println(a.mean());
+        System.out.println(a.confidenceHigh());
         System.out.println(a.stddev());
+        System.out.println(a.mean());
+        System.out.println(a.confidenceLow());
 
 
     }
