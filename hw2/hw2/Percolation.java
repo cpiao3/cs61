@@ -3,106 +3,126 @@ package hw2;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 import java.io.IOException;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    public boolean[][] perc;
-    WeightedQuickUnionUF set;
-    WeightedQuickUnionUF tract;
-    public int top;
-    public int bottom;
+    private boolean[] open; //blocked: false, open: true
+    private boolean[] connectTop;
+    private boolean[] connectBottom;
+    private int N; //create N-by-N grid
+    private WeightedQuickUnionUF uf;
+    private boolean percolateFlag;
     public int opensites=0;
-    public int length;
 
 
-    public Percolation(int N) {
-        if(N<=0){
-            throw new IllegalArgumentException();
+    public Percolation(int N)  {             // create N-by-N grid, with all sites blocked
+        if (N <= 0) {
+            throw new IllegalArgumentException("N must be bigger than 0");
         }
-            perc = new boolean[N][N];
-            set = new WeightedQuickUnionUF(N*N+2);
-            tract = new WeightedQuickUnionUF(N*N+2);
-            top = N*N+1;
-            bottom = N*N;
-            length = N;
+        this.N = N;
+        uf = new WeightedQuickUnionUF(N*N);
+        open = new boolean[N*N];
+        connectTop = new boolean[N*N];
+        connectBottom = new boolean[N*N];
+
+        for (int i = 0; i < N*N; i++) {
+            open[i] = false;
+            connectTop[i] = false;
+            connectBottom[i] = false;
+        }
+        percolateFlag = false;
     }
-    public void open(int row, int col) {
-        if (perc[col][row]==false) {
-            if (row == 0) {
-                perc[col][row] = true;
-                set.union(top, index(row, col));
-                tract.union(top,index(row, col));
-                connect(row, col);
-            } if (row == perc.length - 1) {
-                perc[col][row] = true;
-                set.union(bottom, index(row, col));
-                connect(row, col);
-            } else {
-                perc[col][row] = true;
-                connect(row, col);
+
+    public void open(int row, int col)  {        // open site (row i, column j) if it is not open already
+        validateIJ(row, col);
+        int index = xyTo1D(row, col);
+        open[index] = true;  //open
+        boolean top = false;
+        boolean bottom = false;
+
+
+        if (row < N && open[index+N]) {
+            if (connectTop[uf.find(index+N)] || connectTop[uf.find(index)] ) {
+                top = true;
             }
-            opensites++;
+            if (connectBottom[uf.find(index+N)] || connectBottom[uf.find(index)] ) {
+                bottom = true;
+            }
+            uf.union(index, index+N);
+        }
+        if (row > 1 && open[index-N]) {
+            if (connectTop[uf.find(index-N)] || connectTop[uf.find(index)] ) {
+                top = true;
+            }
+            if (connectBottom[uf.find(index-N)] || connectBottom[uf.find(index)] ) {
+                bottom = true;
+            }
+            uf.union(index, index-N);
+        }
+        if (col < N && open[index+1]) {
+            if (connectTop[uf.find(index+1)] || connectTop[uf.find(index)] ) {
+                top = true;
+            }
+            if (connectBottom[uf.find(index+1)] || connectBottom[uf.find(index)] ) {
+                bottom = true;
+            }
+            uf.union(index, index+1);
+        }
+        if (col > 1 && open[index-1]) {
+            if (connectTop[uf.find(index-1)] || connectTop[uf.find(index)] ) {
+                top = true;
+            }
+            if (connectBottom[uf.find(index-1)] || connectBottom[uf.find(index)] ) {
+                bottom = true;
+            }
+            uf.union(index, index-1);
+        }
+        if(row == 1) {
+            top = true;
+        }
+        if(row == N){
+            bottom = true;
+        }
+        connectTop[uf.find(index)] = top;
+        connectBottom[uf.find(index)] = bottom;
+        if( connectTop[uf.find(index)] &&  connectBottom[uf.find(index)]) {
+            percolateFlag = true;
         }
     }
-    public boolean isOpen(int row, int col){
-        if (perc[col][row]==true){
-            return true;
-        }
-        return false;
+
+    private int xyTo1D(int i, int j) {
+        validateIJ(i, j);
+        return j + (i-1) * N -1;
     }
-    public boolean isFull(int row, int col){
-        if (tract.connected(top,index(row,col))){
-            return true;
+
+    private void validateIJ(int i, int j) {
+        if (!(i >= 1 && i <= N && j >= 1 && j <= N)) {
+            throw new IndexOutOfBoundsException("Index is not betwwen 1 and N");
         }
-        return false;
     }
-    public int numberOfOpenSites()  {
+
+    public boolean isOpen(int row, int col) {     // is site (row i, column j) open?
+        validateIJ(row, col);
+        return open[xyTo1D(row, col)];
+    }
+
+    /*A full site is an open site that can be connected to an open site in the top row
+     * via a chain of neighboring (left, right, up, down) open sites.
+     */
+    public boolean isFull(int row, int col) {    // is site (row i, column j) full?
+        validateIJ(row, col);
+        return connectTop[uf.find(xyTo1D(row, col))];
+    }
+
+    /* Introduce 2 virtual sites (and connections to top and bottom).
+     * Percolates iff virtual top site is connected to virtual bottom site.
+     */
+    public boolean percolates()  {           // does the system percolate?
+        return percolateFlag;
+    }
+    public int numberOfOpenSites() {
         return opensites;
     }
-    public boolean percolates(){
-        return (set.connected(top,bottom));
+    public static void main(String[] args) { // test client (optional)
     }
-
-    private int index(int y,int x){
-        return (y*length)+x;
-    }
-
-    private void connect(int row,int col){
-        if (row != perc.length-1) {
-            if (isOpen(row + 1, col)) {
-                set.union(index(row + 1, col), index(row, col));
-                tract.union(index(row + 1, col), index(row, col));
-            }
-        }
-        if (row != 0) {
-            if (isOpen(row - 1, col)) {
-                set.union(index(row - 1, col), index(row, col));
-                tract.union(index(row - 1, col), index(row, col));
-            }
-        }
-        if (col != perc.length-1) {
-            if (isOpen(row, col + 1)) {
-                set.union(index(row, col + 1), index(row, col));
-                tract.union(index(row, col + 1), index(row, col));
-
-            }
-        }
-        if (col != 0) {
-            if (isOpen(row, col - 1)) {
-                set.union(index(row , col-1), index(row, col));
-                tract.union(index(row , col-1), index(row, col));
-            }
-        }
-    }
-
-    public static void main(String arg[]){
-        Percolation perc = new Percolation(2);
-        perc.open(1,0);
-        perc.open(0,0);
-        System.out.println(perc.percolates());
-    }
-
-
-
-
-
 }
