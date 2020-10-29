@@ -2,7 +2,6 @@ package hw2;
 import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.introcs.StdStats;
 public class PercolationStats {
-    public double sum_fraction = 0;
     public int experiment_num;
     public double[] t;
     public double mean;
@@ -23,12 +22,12 @@ public class PercolationStats {
             }
             double fraction = (double) perc.numberOfOpenSites() / (N * N);
             t[i] = fraction;
-            sum_fraction += fraction;
+
         }
     }
 
     public double mean() {
-        mean = sum_fraction / experiment_num;
+        mean = StdStats.mean(t);
         return mean;
     }
 
