@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.*;
 
 public class TestComplexOomage {
 
@@ -39,13 +40,12 @@ public class TestComplexOomage {
     @Test
     public void testWithDeadlyParams() {
         List<Oomage> deadlyList = new ArrayList<>();
-        for (int i = 0; i < 5000000; i += 1) {
+        for (int i = 0; i < 100; i += 1) {
             deadlyList.add(ComplexOomage.randomComplexOomage());
 
         }
-        assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 2));
-        }
-
+        assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
+    }
 
 
 
