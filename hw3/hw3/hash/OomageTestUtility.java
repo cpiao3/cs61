@@ -14,8 +14,10 @@ public class OomageTestUtility {
     public static boolean haveNiceHashCodeSpread(List<Oomage> oomages, int M) {
         LinkedList<Oomage>[] a = new LinkedList[M];
         for (int i = 0; i < oomages.size(); i += 1) {
-
             int bucketNum = (oomages.get(i).hashCode() & 0x7FFFFFFF) % M;
+            if (oomages.get(i).hashCode()<0){
+                return false;
+            }
             if (a[bucketNum] == null){
                 a[bucketNum] = new LinkedList<Oomage>();
             }
@@ -23,7 +25,7 @@ public class OomageTestUtility {
         }
         for (int i = 0;i<a.length;i++){
             if (a[i]!=null) {
-                if (oomages.size() / 50 >= a[i].size() || oomages.size() / 2.5 <= a[i].size()) {
+                if (oomages.size() / 50 > a[i].size() || oomages.size() / 2.5 < a[i].size()) {
                     return false;
                 }
             }
