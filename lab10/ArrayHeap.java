@@ -99,13 +99,10 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T>{
     private void swim(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-        if (contents[parentIndex(index)]!=null) {
-            if (contents[parentIndex(index)].priority() > contents[index].priority()) {
-                swap(parentIndex(index), index);
-                swim(parentIndex(index));
-            }
+        while (index>1 && contents[index].priority() < contents[parentIndex(index)].priority() ){
+            swap(index,parentIndex(index));
+            index = parentIndex(index);
         }
-        return;
     }
 
     /**
@@ -114,31 +111,19 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T>{
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-        if (leftIndex(index) >= contents.length && rightIndex(index) >= contents.length){
-            return;
-        }
-        if (contents[leftIndex(index)]!=null && contents[rightIndex(index)]!=null){
-            if (contents[leftIndex(index)].priority() < contents[rightIndex(index)].priority()){
-                swap(index,leftIndex(index));
-                sink(leftIndex(index));
-            } else{
-                swap(index,rightIndex(index));
+        if (rightIndex(index)<= contents.length) {
+            if (contents[leftIndex(index)] != null) {
+                if (contents[index].priority() > contents[leftIndex(index)].priority()) {
+                    swap(index, leftIndex(index));
+                    sink(leftIndex(index));
+                }
+            }
+            if (contents[rightIndex(index)] != null) {
+                if (contents[index].priority() > contents[rightIndex(index)].priority())
+                    swap(index, rightIndex(index));
                 sink(rightIndex(index));
             }
         }
-        else if (contents[leftIndex(index)] == null && contents[rightIndex(index)]!=null) {
-            if (contents[rightIndex(index)].priority()<contents[index].priority()) {
-                swap(index, rightIndex(index));
-                sink(rightIndex(index));
-            }
-        }
-        else if (contents[leftIndex(index)] != null && contents[rightIndex(index)]==null) {
-            if (contents[leftIndex(index)].priority()<contents[index].priority()) {
-                swap(index, leftIndex(index));
-                sink(leftIndex(index));
-            }
-        }
-        return;
     }
 
 
@@ -180,7 +165,9 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T>{
         T item = contents[1].item();
         contents[1] = null;
         swap(1,size);
-        sink(1);
+        if(contents[1]!=null) {
+            sink(1);
+        }
         size--;
         return item;
     }
