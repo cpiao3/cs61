@@ -1,6 +1,7 @@
 package hw4.puzzle;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,5 +84,7 @@ public class CommonBugDetector {
                            + " enqueued in your MinPQ and compare to the comments.");
         // if you print out the total number of items enqueued by s3
         // it should be approximately 25, not approximately 50.
+
+
     }
 }

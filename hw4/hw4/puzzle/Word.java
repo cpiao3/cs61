@@ -71,6 +71,8 @@ public class Word implements WorldState {
     }
 
 
+
+
     @Override
     public Iterable<WorldState> neighbors() {
         Set<WorldState> neighbs = new HashSet<>();
