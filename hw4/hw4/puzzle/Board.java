@@ -107,6 +107,12 @@ public class Board implements WorldState{
         return a;
     }
     public boolean equals(Object y){
+        if (this == y) {
+            return true;
+        }
+        if (y == null || getClass() != y.getClass()) {
+            return false;
+        }
         Board a = (Board) y;
         if (this.size() !=a.size()){
             return false;
