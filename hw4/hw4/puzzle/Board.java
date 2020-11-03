@@ -65,9 +65,9 @@ public class Board implements WorldState{
     public int manhattan(){
         int man = 0;
         for (int i = 0 ; i<size();i++){
-            for (int j = 1;j<=size();j++){
-                if (i*size()+j != board[i][j-1]&& board[i][j-1]!=0){
-                    man += positiondif(i,j-1);
+            for (int j = 0;j<size();j++){
+                if (i*size()+j+1 != board[i][j]&&board[i][j]!=0){
+                    man += positiondif(i,j);
                 }
             }
         }
@@ -75,23 +75,33 @@ public class Board implements WorldState{
     }
 
     private int positiondif(int i ,int j){
-        int a = board[i][j]%size()-1;
-        int b = board[i][j]/size();
-        if (a == 0 ){
-            b-=1;
-        }
-        if (a>i){
-            a = a - i;
-        } else {
-            a = i - a;
-        }
-        if (b>j){
-            b = b-j;
+        int y = board[i][j]/size();
+        int x = board[i][j]%size();
+        int xdif=0;
+        int ydif=0;
+        if (x == 0){
+            x = size()-1;
+            y = y-1;
         } else{
-            b = j-b;
+            x = x-1;
         }
-        return a+b;
+
+        if (x > j){
+            xdif = x - j;
+        } else{
+            xdif = j - x;
+        }
+
+        if (y > i){
+            ydif = y - i;
+        } else{
+            ydif = i - y;
+        }
+        System.out.println("board"+i+j+"is"+xdif+ydif+board[i][j]);
+        return (xdif+ydif);
+
     }
+
 
     public int estimatedDistanceToGoal(){
         int a = manhattan();

@@ -10,12 +10,8 @@ public class WordPuzzleSolver {
         String start = "horse";
         String goal = "nurse";
 
-        Word startState = new Word(start, goal);
-        Solver solver = new Solver(startState);
 
-        StdOut.println("Minimum number of moves = " + solver.moves());
-        for (WorldState ws : solver.solution()) {
-            StdOut.println(ws);
-        }
+
+        System.out.println(1/3);
     }
 }
