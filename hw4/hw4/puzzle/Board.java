@@ -97,7 +97,6 @@ public class Board implements WorldState{
         } else{
             ydif = i - y;
         }
-        System.out.println("board"+i+j+"is"+xdif+ydif+board[i][j]);
         return (xdif+ydif);
 
     }
@@ -109,6 +108,9 @@ public class Board implements WorldState{
     }
     public boolean equals(Object y){
         Board a = (Board) y;
+        if (this.size() !=a.size()){
+            return false;
+        }
         for (int i = 0; i<size();i++){
             for(int j = 0; j<size();j++){
                 if (this.tileAt(i,j) != a.tileAt(i,j)){
