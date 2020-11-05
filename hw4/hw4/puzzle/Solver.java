@@ -6,16 +6,16 @@ import java.util.LinkedList;
 
 public class Solver {
 
-    private MinPQ<SearchNode> PQ = new MinPQ<>();
+    private MinPQ<SearchNode> P = new MinPQ<>();
     private SearchNode prevs;
     private WorldState firstWorldState;
     private int finalmove;
     private LinkedList<WorldState> solution =  new LinkedList();
     public Solver(WorldState initial){
-        if (PQ.isEmpty()) {
+        if (P.isEmpty()) {
             firstWorldState = initial;
             SearchNode first = new SearchNode(initial, 0, null);
-            PQ.insert(first);
+            P.insert(first);
             prevs = first;
         }
         Explore();
@@ -30,21 +30,21 @@ public class Solver {
     }
 
     private void Explore(){
-        while (!PQ.min().word.isGoal()) {
-            prevs = PQ.delMin();
+        while (!P.min().word.isGoal()) {
+            prevs = P.delMin();
             for (WorldState x : prevs.word.neighbors()) {
                 if (prevs.prev != null) {
                     if (!prevs.prev.word.equals(x)) {
                         SearchNode neighbor = new SearchNode(x, prevs.moves + 1, prevs);
-                        PQ.insert(neighbor);
+                        P.insert(neighbor);
                     }
                 } else {
                     SearchNode neighbor = new SearchNode(x, prevs.moves + 1, prevs);
-                    PQ.insert(neighbor);
+                    P.insert(neighbor);
                 }
             }
         }
-            prevs = PQ.delMin();
+            prevs = P.delMin();
             finalmove = prevs.moves;
     }
 
