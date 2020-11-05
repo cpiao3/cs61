@@ -2,23 +2,27 @@ package hw4.puzzle;
 import edu.princeton.cs.algs4.Queue;
 
 public class Board implements WorldState{
-    private int[][] board;
-    private int BLANK = 0;
-    public Board(int[][] tiles){
-        board = new int[tiles.length][tiles[0].length];
-        for (int i = 0; i < tiles.length;i++){
-            for (int j = 0;j< tiles[0].length;j++){
-                board[i][j] = tiles[i][j];
+    private int[] board;
+    private int N;
+     Board(int[][] tiles){
+         N= tiles.length;
+        board = new int[N*N];
+        int b = 0;
+        for (int i = 0; i < N;i++){
+            for (int j = 0;j< N;j++){
+                board[b] = tiles[i][j];
+                b++;
             }
         }
     }
     public int tileAt(int i, int j){
-        return board[i][j];
+        return board[i*size()+j];
     }
     public int size(){
-        return board.length;
+        return N;
     }
     public Iterable<WorldState> neighbors() {
+         int BLANK = 0;
         Queue<WorldState> neighbors = new Queue<>();
         int hug = size();
         int bug = -1;
@@ -53,30 +57,31 @@ public class Board implements WorldState{
     }
     public int hamming(){
         int ham = 0;
-        for (int i = 0;i<size();i++){
-            for (int j = 1;j<=size();j++){
-                if (i*size()+j != board[i][j-1]&& board[i][j-1]!=0){
+        int a = 0;
+        for (int i = 0;i<size()*size();i++){
+                if (i+1 != board[a]&& board[a]!=0){
                     ham++;
                 }
-            }
+                a++;
+
         }
         return ham;
     }
     public int manhattan(){
         int man = 0;
-        for (int i = 0 ; i<size();i++){
-            for (int j = 0;j<size();j++){
-                if (i*size()+j+1 != board[i][j]&&board[i][j]!=0){
-                    man += positiondif(i,j);
-                }
+        for (int i = 0 ; i<size()*size();i++){
+                if (i+1 != board[i] && board[i]!=0){
+                    man += positiondif(i);
             }
         }
         return man;
     }
 
-    private int positiondif(int i ,int j){
-        int y = board[i][j]/size();
-        int x = board[i][j]%size();
+    private int positiondif(int i){
+        int y = board[i]/size();
+        int x = board[i]%size();
+        int xorg = i / size();
+        int yorg = i / size();
         int xdif=0;
         int ydif=0;
         if (x == 0){
@@ -85,27 +90,18 @@ public class Board implements WorldState{
         } else{
             x = x-1;
         }
+        xdif = Math.abs(x - xorg);
+        ydif = Math.abs(y - yorg);
 
-        if (x > j){
-            xdif = x - j;
-        } else{
-            xdif = j - x;
-        }
-
-        if (y > i){
-            ydif = y - i;
-        } else{
-            ydif = i - y;
-        }
         return (xdif+ydif);
 
     }
 
 
     public int estimatedDistanceToGoal(){
-        int a = manhattan();
-        return a;
+        return manhattan();
     }
+
     public boolean equals(Object y){
         if (this == y) {
             return true;

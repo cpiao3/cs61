@@ -5,9 +5,9 @@ import java.util.LinkedList;
 
 
 public class Solver {
-    public int i = 0;
+
     private MinPQ<SearchNode> PQ = new MinPQ<>();
-    private SearchNode prev;
+    private SearchNode prevs;
     private WorldState firstWorldState;
     private int finalmove;
     private LinkedList<WorldState> solution =  new LinkedList();
@@ -16,7 +16,7 @@ public class Solver {
             firstWorldState = initial;
             SearchNode first = new SearchNode(initial, 0, null);
             PQ.insert(first);
-            prev = first;
+            prevs = first;
         }
         Explore();
     }
@@ -26,55 +26,37 @@ public class Solver {
     }
 
     public Iterable<WorldState> solution(){
-        return solution;
+        return createsolution();
     }
 
     private void Explore(){
-        prev = PQ.min();
-        if (!PQ.delMin().word.isGoal()) {
-            Iterable<WorldState> neighbors = prev.word.neighbors();
-            for (WorldState x : neighbors) {
-                if (prev.prev != null) {
-                    if (!x.equals(prev.prev.word)) {
-                        SearchNode neighbor = new SearchNode(x, prev.moves + 1, prev);
+        while (!PQ.min().word.isGoal()) {
+            prevs = PQ.delMin();
+            for (WorldState x : prevs.word.neighbors()) {
+                if (prevs.prev != null) {
+                    if (!prevs.prev.word.equals(x)) {
+                        SearchNode neighbor = new SearchNode(x, prevs.moves + 1, prevs);
                         PQ.insert(neighbor);
                     }
                 } else {
-                    SearchNode neighbor = new SearchNode(x, prev.moves + 1, prev);
+                    SearchNode neighbor = new SearchNode(x, prevs.moves + 1, prevs);
                     PQ.insert(neighbor);
                 }
             }
-            Explore();
-        } else {
-            finalmove = prev.moves;
-            creatsolution();
         }
+            prevs = PQ.delMin();
+            finalmove = prevs.moves;
     }
 
-    private void creatsolution(){
-        while (prev != null) {
-            solution.addFirst(prev.word);
-            prev = prev.prev;
+    private  LinkedList<WorldState> createsolution(){
+        while (prevs != null) {
+            solution.addFirst(prevs.word);
+            prevs = prevs.prev;
         }
+        return solution;
     }
 
-    private class SearchNode implements Comparable<SearchNode>{
-        private WorldState word;
-        private int moves;
-        private SearchNode prev;
-        private int priority;
-        public SearchNode(WorldState word, int moves, SearchNode prev){
-            this.word = word;
-            this.prev = prev;
-            this.moves = moves;
-            priority = this.moves + word.estimatedDistanceToGoal();
-        }
-        @Override
-        public int compareTo(SearchNode o2){
-            return this.priority-o2.priority;
-        }
 
-    }
 
 
 }
