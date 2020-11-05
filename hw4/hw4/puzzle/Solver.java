@@ -48,7 +48,7 @@ public class Solver {
             finalmove = prevs.moves;
     }
 
-    private  LinkedList<WorldState> createsolution(){
+    private LinkedList<WorldState> createsolution(){
         while (prevs != null) {
             solution.addFirst(prevs.word);
             prevs = prevs.prev;
@@ -56,11 +56,11 @@ public class Solver {
         return solution;
     }
     private class SearchNode implements Comparable<SearchNode>{
-        public WorldState word;
-        public int moves;
-        public SearchNode prev;
-        public int priority;
-        public SearchNode(WorldState word, int moves, SearchNode prev){
+        private WorldState word;
+        private int moves;
+        private SearchNode prev;
+        private int priority;
+        private SearchNode(WorldState word, int moves, SearchNode prev){
             this.word = word;
             this.prev = prev;
             this.moves = moves;

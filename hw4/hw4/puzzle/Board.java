@@ -14,9 +14,12 @@ public class Board implements WorldState{
     public int tileAt(int i, int j){
         return board[i][j];
     }
+
     public int size(){
         return board.length;
     }
+
+    @Override
     public Iterable<WorldState> neighbors() {
         int BLANK = 0;
         Queue<WorldState> neighbors = new Queue<>();
@@ -101,12 +104,13 @@ public class Board implements WorldState{
 
     }
 
-
+    @Override
     public int estimatedDistanceToGoal(){
         int a = manhattan();
         return a;
     }
 
+    @Override
     public boolean equals(Object y){
         if (this == y) {
             return true;
