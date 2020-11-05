@@ -3,7 +3,7 @@ import edu.princeton.cs.algs4.Queue;
 
 public class Board implements WorldState{
     private int[][] board;
-    Board(int[][] tiles){
+    public Board(int[][] tiles){
         board = new int[tiles.length][tiles[0].length];
         for (int i = 0; i < tiles.length;i++){
             for (int j = 0;j< tiles[0].length;j++){

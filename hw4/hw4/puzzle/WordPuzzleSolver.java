@@ -12,6 +12,5 @@ public class WordPuzzleSolver {
 
 
 
-        System.out.println(1/3);
     }
 }
