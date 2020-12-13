@@ -68,7 +68,6 @@ public class Router{
                 }
             }
             lastid = currentid;
-            System.out.println(fringe.peek());
             currentid = fringe.poll().id();
             mark.add(currentid);
         }
