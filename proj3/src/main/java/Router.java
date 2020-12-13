@@ -48,9 +48,7 @@ public class Router{
             Set<Long> nearby = (Set) g.adjacent(currentid);
             nearby.remove(lastid);
             Set size = (Set) g.vertices();
-            if (mark.size() == size.size()){
-                currentid = end;
-            }
+
             for (long id : nearby){
                 double distance = g.distance(id,currentid) + dis_to_source.get(currentid);
                 if (!dis_to_source.containsKey(id)){
