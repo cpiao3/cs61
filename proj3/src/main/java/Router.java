@@ -47,10 +47,13 @@ public class Router{
         while (currentid != end){
             Set<Long> nearby = (Set) g.adjacent(currentid);
             nearby.remove(lastid);
+            Set size = (Set) g.vertices();
+            if (mark.size() == size.size()){
+                currentid = end;
+            }
             for (long id : nearby){
                 double distance = g.distance(id,currentid) + dis_to_source.get(currentid);
-                if (!mark.contains(id)){
-                    mark.add(id);
+                if (!dis_to_source.containsKey(id)){
                     dis_to_source.put(id,distance);
                     edge.put(id,currentid);
                     Fringe f = new Fringe(id,distance+ g.distance(id,end));
@@ -65,7 +68,9 @@ public class Router{
                 }
             }
             lastid = currentid;
+            System.out.println(fringe.peek());
             currentid = fringe.poll().id();
+            mark.add(currentid);
         }
 
         LinkedList result = new LinkedList();

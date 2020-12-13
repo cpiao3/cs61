@@ -28,7 +28,7 @@ public class TestRouter {
         initialized = true;
     }
 
-    @Test
+
     public void testShortestPath() throws Exception {
         List<Map<String, Double>> testParams = paramsFromFile();
         List<List<Long>> expectedResults = resultsFromFile();
@@ -42,7 +42,16 @@ public class TestRouter {
             List<Long> expected = expectedResults.get(i);
             assertEquals("Your results did not match the expected results", expected, actual);
         }
+
     }
+    @Test
+    public void testShortestPath2() throws Exception {
+        List<Long> actual = Router.shortestPath(graph,37.84940056378224,-122.2457278986404, 37.87722948729772, 122.25568730484976);
+        System.out.println(actual);
+
+    }
+
+
 
     private List<Map<String, Double>> paramsFromFile() throws Exception {
         List<String> lines = Files.readAllLines(Paths.get(PARAMS_FILE), Charset.defaultCharset());
