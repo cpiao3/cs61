@@ -1,12 +1,13 @@
 import org.xml.sax.SAXException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
+import java.util.*;
+import java.lang.Math;
+
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -26,6 +27,7 @@ public class GraphDB {
      * You do not need to modify this constructor, but you're welcome to do so.
      * @param dbPath Path to the XML file to be parsed.
      */
+    private HashMap<Long,Node> nodes = new HashMap<>();
     public GraphDB(String dbPath) {
         try {
             File inputFile = new File(dbPath);
@@ -57,26 +59,38 @@ public class GraphDB {
      *  we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        // TODO: Your code here.
+        Set<Long> keys = nodes.keySet();
+        ArrayList<Long> useless = new ArrayList<>();
+        for (long key : keys) {
+            Set<Long> a = (Set) nodes.get(key).Iterable();
+            if (a.isEmpty()) {
+                useless.add(key);
+            }
+        }
+        for (int i = 0; i < useless.size(); i++) {
+            nodes.remove(useless.get(i));
+        }
     }
-
     /**
      * Returns an iterable of all vertex IDs in the graph.
      * @return An iterable of id's of all vertices in the graph.
      */
     Iterable<Long> vertices() {
-        //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        return nodes.keySet();
     }
 
+    int num_vertex(){
+        return nodes.keySet().size();
+    }
     /**
      * Returns ids of all vertices adjacent to v.
      * @param v The id of the vertex we are looking adjacent to.
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        return nodes.get(v).Iterable();
     }
+
 
     /**
      * Returns the great-circle distance between vertices v and w in miles.
@@ -136,7 +150,17 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        Set<Long> keys = nodes.keySet();
+        double currentdif = Double.POSITIVE_INFINITY;
+        long id = 0;
+        for (long key:keys){
+            double distance = distance(nodes.get(key).lon(), nodes.get(key).lat(), lon, lat);
+            if (distance<currentdif){
+                id = key;
+                currentdif = distance;
+            }
+        }
+        return id;
     }
 
     /**
@@ -145,7 +169,7 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        return nodes.get(v).lon();
     }
 
     /**
@@ -154,6 +178,21 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        return nodes.get(v).lat();
     }
+
+    public void addNode(String id,String lon,String lat){
+
+        nodes.put(Long.parseLong(id),new Node(id,lon,lat));
+    }
+
+    public void addEdge(String node1, String node2) {
+        nodes.get(Long.parseLong(node1)).Connect(node2);
+    }
+
+    public Node get_node(long v){
+        return nodes.get(v);
+    }
+
+
 }

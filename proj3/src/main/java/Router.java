@@ -1,5 +1,6 @@
-import java.util.List;
-import java.util.Objects;
+
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,7 +12,8 @@ import java.util.regex.Pattern;
  * The difference between A* and Dijkstra's is only a couple of lines of code, and boils
  * down to the priority you use to order your vertices.
  */
-public class Router {
+public class Router{
+
     /**
      * Return a List of longs representing the shortest path from the node
      * closest to a start location and the node closest to the destination
@@ -25,8 +27,58 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+        long start = g.closest(stlon,stlat);
+        long end = g.closest(destlon,destlat);
+        Set<Long> mark = new HashSet<>();
+        HashMap<Long,Double> dis_to_source = new HashMap<>();
+        HashMap<Long,Long> edge = new HashMap<>();
+        HashMap<Long,Fringe> fringemap = new HashMap<>();
+        PriorityQueue<Fringe> fringe = new PriorityQueue<>();
+
+        dis_to_source.put(start,0.0);
+        Fringe first = new Fringe(start);
+        fringe.add(first);
+        first.set_priority(0);
+
+        long currentid = start;
+        long lastid = start;
+
+        /// start with districk algorithem///
+        while (currentid != end){
+            Set<Long> nearby = (Set) g.adjacent(currentid);
+            nearby.remove(lastid);
+            for (long id : nearby){
+                double distance = g.distance(id,currentid) + dis_to_source.get(currentid);
+                if (!mark.contains(id)){
+                    mark.add(id);
+                    dis_to_source.put(id,distance);
+                    edge.put(id,currentid);
+                    Fringe f = new Fringe(id,distance+ g.distance(id,end));
+                    fringe.add(f);
+                    fringemap.put(id,f);
+                } else{
+                    if (dis_to_source.get(id)  > distance){
+                        dis_to_source.replace(id,distance);
+                        edge.replace(id,currentid);
+                        fringemap.get(id).set_priority(distance + g.distance(id,end));
+                    }
+                }
+            }
+            lastid = currentid;
+            currentid = fringe.poll().id();
+        }
+
+        LinkedList result = new LinkedList();
+
+        while (currentid != start){
+            result.addFirst(currentid);
+            currentid = edge.get(currentid);
+        }
+        result.addFirst(start);
+        return result;
     }
+
+
 
     /**
      * Create the list of directions corresponding to a route on the graph.
@@ -160,4 +212,5 @@ public class Router {
             return Objects.hash(direction, way, distance);
         }
     }
+
 }

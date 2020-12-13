@@ -8,9 +8,12 @@ import java.util.Map;
  * not draw the output correctly.
  */
 public class Rasterer {
-
+    private double QueryLonDPP;
+    private double Width;
+    private double Length;
     public Rasterer() {
-        // YOUR CODE HERE
+        Width = MapServer.ROOT_LRLON - MapServer.ROOT_ULLON;
+        Length = MapServer.ROOT_LRLAT - MapServer.ROOT_ULLAT;
     }
 
     /**
@@ -42,11 +45,55 @@ public class Rasterer {
      *                    forget to set this to true on success! <br>
      */
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
-        // System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
-                           + "your browser.");
+        if( params.get("lrlon")>MapServer.ROOT_LRLON || params.get("lrlat")<MapServer.ROOT_LRLAT ||params.get("ullon")<MapServer.ROOT_ULLON||params.get("ullat")>MapServer.ROOT_ULLAT){
+            results.put("query_success",false);
+        } else if (params.get("ullon")>params.get("lrlon")||params.get("ullat")<params.get("lrlat")) {
+            results.put("query_success", false);
+        }
+         else {
+            results.put("query_success", true);
+        }
+        QueryLonDPP = (params.get("lrlon") - params.get("ullon")) / params.get("w");
+        int depth = getdepth();
+        int x = (int)Math.floor((params.get("ullon") - MapServer.ROOT_ULLON) / (Width/ Math.pow(2,depth)));
+        int y = (int)Math.floor((params.get("ullat") - MapServer.ROOT_ULLAT) / (Length/ Math.pow(2,depth)));
+        int xlow = (int)Math.ceil((params.get("lrlon") - MapServer.ROOT_ULLON) / (Width/ Math.pow(2,depth)));
+        int ylow = (int)Math.ceil((params.get("lrlat") - MapServer.ROOT_ULLAT) / (Length/ Math.pow(2,depth)));
+        results.put("raster_ul_lon",MapServer.ROOT_ULLON+(Width/ Math.pow(2,depth))*x);
+        results.put("raster_ul_lat",MapServer.ROOT_ULLAT+(Length/ Math.pow(2,depth))*y);
+        results.put("raster_lr_lon",MapServer.ROOT_ULLON+(Width/ Math.pow(2,depth))*xlow);
+        results.put("raster_lr_lat",MapServer.ROOT_ULLAT+(Length/ Math.pow(2,depth))*ylow);
+        results.put("depth",depth);
+        String[][] render = render_grid(x,y,xlow,ylow,depth);
+        results.put("render_grid",render);
         return results;
     }
+
+    private String[][] render_grid(int x,int y,int xlow,int ylow,int depth){
+        String[][] render = new String[ylow - y][xlow - x];
+        for (int i = 0;i<render.length;i++){
+            for (int b = 0;b<render[0].length;b++){
+                render[i][b] = "d"+String.valueOf(depth)+"_x"+String.valueOf(x+b)+"_y"+String.valueOf(y+i)+".png";
+            }
+        }
+        return render;
+    }
+
+    private int getdepth(){
+        double Wid = Width;
+        double imgLonDPP = Wid/256;
+        int depth = 0;
+        while (imgLonDPP > QueryLonDPP){
+            Wid = Wid/2;
+            imgLonDPP = Wid/256;
+            depth++;
+        }
+        if (depth > 7){
+            depth = 7;
+        }
+        return depth;
+    }
+
 
 }
