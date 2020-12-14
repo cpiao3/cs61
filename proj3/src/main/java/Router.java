@@ -42,8 +42,11 @@ public class Router{
         long last = start;
 
         /// start with districk algorithem///
+        /// add h(n)///
         while (currentid != end){
-
+            if (fringe.isEmpty()){
+                return new LinkedList();
+            }
             currentid = fringe.poll().id();
             Set<Long> nearby = (Set) g.adjacent(currentid);
             for (Long id : nearby) {
