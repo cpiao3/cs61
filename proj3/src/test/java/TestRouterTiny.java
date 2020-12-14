@@ -61,6 +61,7 @@ public class TestRouterTiny {
         expected.add(66L);
         expected.add(63L);
         expected.add(55L);
+
         assertEquals(expected, actual);
     }
 

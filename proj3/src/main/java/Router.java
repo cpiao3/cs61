@@ -1,5 +1,6 @@
 
 
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +30,7 @@ public class Router{
                                           double destlon, double destlat) {
         long start = g.closest(stlon,stlat);
         long end = g.closest(destlon,destlat);
-        Set<Long> mark = new HashSet<>();
+        Set mark = new HashSet<>();
         HashMap<Long,Double> dis_to_source = new HashMap<>();
         HashMap<Long,Long> edge = new HashMap<>();
         HashMap<Long,Fringe> fringemap = new HashMap<>();
@@ -38,47 +39,47 @@ public class Router{
         dis_to_source.put(start,0.0);
         Fringe first = new Fringe(start);
         fringe.add(first);
-        first.set_priority(0);
+        first.set_priority(Double.NEGATIVE_INFINITY);
+        mark.add(start);
 
         long currentid = start;
         long lastid = start;
 
         /// start with districk algorithem///
-        while (currentid != end){
+        while (!fringe.isEmpty()){
             Set<Long> nearby = (Set) g.adjacent(currentid);
             nearby.remove(lastid);
-            Set size = (Set) g.vertices();
-
-            for (long id : nearby){
-                double distance = g.distance(id,currentid) + dis_to_source.get(currentid);
+         
+            for (Long id : nearby) {
+                double distance = g.distance(currentid, id) + dis_to_source.get(currentid);
                 if (!dis_to_source.containsKey(id)){
                     dis_to_source.put(id,distance);
                     edge.put(id,currentid);
                     Fringe f = new Fringe(id,distance);
                     fringe.add(f);
-                    fringemap.put(id,f);
-                } else{
-                    if (dis_to_source.get(id) > distance){
+                } else {
+                    if (dis_to_source.get(id)>distance){
                         dis_to_source.replace(id,distance);
                         edge.replace(id,currentid);
-                        fringemap.get(id).set_priority(distance);
+                        Fringe a = new Fringe(id,distance);
+                        fringe.add(a);
                     }
                 }
             }
             lastid = currentid;
             currentid = fringe.poll().id();
-            mark.add(currentid);
+
         }
 
         LinkedList result = new LinkedList();
-
-        while (currentid != start){
-            result.addFirst(currentid);
-            currentid = edge.get(currentid);
+        while (end != start){
+            result.addFirst(end);
+            end = edge.get(end);
         }
         result.addFirst(start);
         return result;
     }
+
 
 
 
