@@ -54,14 +54,14 @@ public class Router{
                 if (!dis_to_source.containsKey(id)){
                     dis_to_source.put(id,distance);
                     edge.put(id,currentid);
-                    Fringe f = new Fringe(id,distance+ g.distance(id,end));
+                    Fringe f = new Fringe(id,distance);
                     fringe.add(f);
                     fringemap.put(id,f);
                 } else{
-                    if (dis_to_source.get(id)  > distance){
+                    if (dis_to_source.get(id) > distance){
                         dis_to_source.replace(id,distance);
                         edge.replace(id,currentid);
-                        fringemap.get(id).set_priority(distance + g.distance(id,end));
+                        fringemap.get(id).set_priority(distance);
                     }
                 }
             }
