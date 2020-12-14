@@ -48,8 +48,7 @@ public class Router{
         /// start with districk algorithem///
         while (!fringe.isEmpty()){
             Set<Long> nearby = (Set) g.adjacent(currentid);
-            nearby.remove(lastid);
-         
+
             for (Long id : nearby) {
                 double distance = g.distance(currentid, id) + dis_to_source.get(currentid);
                 if (!dis_to_source.containsKey(id)){

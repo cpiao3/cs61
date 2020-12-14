@@ -28,7 +28,7 @@ public class TestRouter {
         initialized = true;
     }
 
-
+@Test
     public void testShortestPath() throws Exception {
         List<Map<String, Double>> testParams = paramsFromFile();
         List<List<Long>> expectedResults = resultsFromFile();
