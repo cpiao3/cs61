@@ -1,6 +1,7 @@
 
 
 
+import javax.sound.midi.SysexMessage;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,44 +31,35 @@ public class Router{
                                           double destlon, double destlat) {
         long start = g.closest(stlon,stlat);
         long end = g.closest(destlon,destlat);
-        Set mark = new HashSet<>();
         HashMap<Long,Double> dis_to_source = new HashMap<>();
         HashMap<Long,Long> edge = new HashMap<>();
-        HashMap<Long,Fringe> fringemap = new HashMap<>();
         PriorityQueue<Fringe> fringe = new PriorityQueue<>();
 
         dis_to_source.put(start,0.0);
-        Fringe first = new Fringe(start);
-        fringe.add(first);
-        first.set_priority(Double.NEGATIVE_INFINITY);
-        mark.add(start);
+        fringe.add(new Fringe(start,Double.NEGATIVE_INFINITY));
 
         long currentid = start;
-        long lastid = start;
+        long last = start;
 
         /// start with districk algorithem///
-        while (!fringe.isEmpty()){
-            Set<Long> nearby = (Set) g.adjacent(currentid);
+        while (currentid != end){
 
-            for (Long id : nearby) {
-                double distance = g.distance(currentid, id) + dis_to_source.get(currentid);
-                if (!dis_to_source.containsKey(id)){
-                    dis_to_source.put(id,distance);
-                    edge.put(id,currentid);
-                    Fringe f = new Fringe(id,distance);
-                    fringe.add(f);
-                } else {
-                    if (dis_to_source.get(id)>distance){
-                        dis_to_source.replace(id,distance);
-                        edge.replace(id,currentid);
-                        Fringe a = new Fringe(id,distance);
-                        fringe.add(a);
-                    }
-                }
-            }
-            lastid = currentid;
             currentid = fringe.poll().id();
-
+            Set<Long> nearby = (Set) g.adjacent(currentid);
+            for (Long id : nearby) {
+                    double distance = g.distance(currentid, id) + dis_to_source.get(currentid);
+                    if (dis_to_source.containsKey(id)) {
+                        if (dis_to_source.get(id) > distance) {
+                            dis_to_source.replace(id, distance);
+                            edge.replace(id, currentid);
+                            fringe.add(new Fringe(id, distance));
+                        }
+                    } else {
+                        dis_to_source.put(id, distance);
+                        edge.put(id, currentid);
+                        fringe.add(new Fringe(id, distance));
+                    }
+            }
         }
 
         LinkedList result = new LinkedList();
