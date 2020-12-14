@@ -55,12 +55,12 @@ public class Router{
                         if (dis_to_source.get(id) > distance) {
                             dis_to_source.replace(id, distance);
                             edge.replace(id, currentid);
-                            fringe.add(new Fringe(id, distance));
+                            fringe.add(new Fringe(id, distance + g.distance(id,end)));
                         }
                     } else {
                         dis_to_source.put(id, distance);
                         edge.put(id, currentid);
-                        fringe.add(new Fringe(id, distance));
+                        fringe.add(new Fringe(id, distance + g.distance(id,end)));
                     }
             }
         }
