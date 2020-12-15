@@ -76,16 +76,25 @@ public class MergeSort {
             Queue<Item> a = q.dequeue();
             q.enqueue(mergeSortedQueues(a,q.dequeue()));
         }
-        return q.dequeue();
+        Queue<Item> a = q.dequeue();
+        while (!a.isEmpty()){
+            items.enqueue(a.dequeue());
+        }
+        return items;
     }
 
     public static void main(String[] args){
         Queue<Integer> q = new Queue<>();
-
+        q.enqueue(3);
+        q.enqueue(0);
+        q.enqueue(4);
+        q.enqueue(5);
+        q.enqueue(6);
 
         System.out.println(q);
-        Queue<Integer> a = mergeSort(q);
-        System.out.println(a);
+        mergeSort(q);
+        System.out.println(q);
+
 
     }
 }
