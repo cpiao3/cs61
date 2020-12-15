@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.Queue;
+import java.util.Iterator;
 
 public class MergeSort {
     /**
@@ -35,9 +36,10 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
         Queue<Queue<Item>> q = new Queue<>();
-        while (!items.isEmpty()) {
+        Iterator<Item> iterator = items.iterator();
+        while (iterator.hasNext()) {
             Queue<Item> newq= new Queue<>();
-            newq.enqueue(items.dequeue());
+            newq.enqueue(iterator.next());
             q.enqueue(newq);
         }
         return q;
@@ -76,11 +78,8 @@ public class MergeSort {
             Queue<Item> a = q.dequeue();
             q.enqueue(mergeSortedQueues(a,q.dequeue()));
         }
-        Queue<Item> a = q.dequeue();
-        while (!a.isEmpty()){
-            items.enqueue(a.dequeue());
-        }
-        return items;
+
+        return q.dequeue();
     }
 
     public static void main(String[] args){
@@ -92,8 +91,8 @@ public class MergeSort {
         q.enqueue(6);
 
         System.out.println(q);
-        mergeSort(q);
-        System.out.println(q);
+        Queue<Integer> a =  mergeSort(q);
+        System.out.println(a);
 
 
     }

@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.Queue;
 
+import java.util.Iterator;
+
 public class QuickSort {
     /**
      * Returns a new queue that contains the given queues catenated together.
@@ -47,8 +49,9 @@ public class QuickSort {
     private static <Item extends Comparable> void partition(
             Queue<Item> unsorted, Item pivot,
             Queue<Item> less, Queue<Item> equal, Queue<Item> greater) {
-            while (!unsorted.isEmpty()){
-                Item a = unsorted.dequeue();
+            Iterator<Item> iterator = unsorted.iterator();
+            while (iterator.hasNext()){
+                Item a = iterator.next();
                 if (a.compareTo(pivot)>0){
                     greater.enqueue(a);
                 } else if (a.compareTo(pivot)<0){
@@ -63,17 +66,16 @@ public class QuickSort {
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> quickSort(
             Queue<Item> items) {
-        while(true) {
-
-            Queue<Item> less = new Queue<>();
-            Queue<Item> equal = new Queue<>();
-            Queue<Item> greater = new Queue<>();
-            Item pivot = getRandomItem(items);
-            partition(items, pivot, less, equal, greater);
-            Queue<Item> catenated = catenate(less, equal);
-            items = catenate(catenated, greater);
-            break;
+        if (items.size() <= 1){
+            return items;
         }
+        Queue<Item> less = new Queue<>();
+        Queue<Item> equal = new Queue<>();
+        Queue<Item> greater = new Queue<>();
+        Item pivot = getRandomItem(items);
+        partition(items, pivot, less, equal, greater);
+        Queue<Item> catenated = catenate(quickSort(less), equal);
+        items = catenate(catenated, quickSort(greater));
         return items;
     }
 
@@ -81,12 +83,15 @@ public class QuickSort {
         Queue<Integer> q = new Queue<>();
         q.enqueue(3);
         q.enqueue(0);
-        q.enqueue(4);
-        q.enqueue(5);
         q.enqueue(6);
+        q.enqueue(5);
+        q.enqueue(4);
+        q.enqueue(120);
+
 
         System.out.println(q);
         Queue<Integer> a = quickSort(q);
+        System.out.println(q);
         System.out.println(a);
 
     }
