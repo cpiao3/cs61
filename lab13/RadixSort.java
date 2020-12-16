@@ -26,15 +26,15 @@ public class RadixSort {
             }
         }
 
-
         for (int b = 0; b < asciis.length ; b += 1){
             if (sorted[b].length() < max){
-                for (int c = 0; c< max - sorted[b].length(); c += 1) {
+                int dif = max - sorted[b].length();
+                for (int c = 0; c< dif ; c += 1) {
                     sorted[b] += " ";
                 }
             }
         }
-        for (int j = 1; j<=max ; j += 1){
+        for (int j = 1; j <= max ; j += 1){
             sortHelperLSD(sorted,j);
         }
         return sorted;
@@ -89,10 +89,10 @@ public class RadixSort {
     }
 
     public static void main(String[] args) {
-        String a = "csd";
-        String c = "abe";
+        String a = "cs";
+        String c = "abefasfd";
         String e = "ab";
-        String d = "hde";
+        String d = "cde";
 
         String[] arr = new String[4];
         arr[0] = a;
