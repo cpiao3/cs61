@@ -26,10 +26,16 @@ public class RadixSort {
             }
         }
 
+
         for (int b = 0; b < asciis.length ; b += 1){
             if (sorted[b].length() < max){
-                sorted[b] += ' ' * 2;
+                for (int c = 0; c< max - sorted[b].length(); c += 1) {
+                    sorted[b] += " ";
+                }
             }
+        }
+        for (int j = 1; j<=max ; j += 1){
+            sortHelperLSD(sorted,j);
         }
         return sorted;
     }
@@ -47,6 +53,21 @@ public class RadixSort {
             int a = asciis[i].charAt(asciis[i].length()-index);
             count[a] += 1;
             record[i] = asciis[i];
+        }
+
+        int lastcount = 0;
+        int lastdigit = 0;
+        for (int c = 0; c < 256 ; c += 1){
+            lastdigit = count[c];
+            count[c] = lastcount;
+            lastcount += lastdigit;
+        }
+
+        for (int j = 0 ; j < asciis.length ; j += 1){
+            String word = record[j];
+            int pos = word.charAt(word.length()-index);
+            asciis[count[pos]] = word;
+            count[pos] += 1;
         }
 
         return;
@@ -68,7 +89,20 @@ public class RadixSort {
     }
 
     public static void main(String[] args) {
-        String a = "c";
-        String c = "a";
+        String a = "csd";
+        String c = "abe";
+        String e = "ab";
+        String d = "hde";
+
+        String[] arr = new String[4];
+        arr[0] = a;
+        arr[1] = c;
+        arr[2] = d;
+        arr[3] = e;
+        String[] result = sort(arr);
+
+        for (int p = 0 ; p < result.length ; p+=1){
+            System.out.println(result[p]);
+        }
     }
 }
