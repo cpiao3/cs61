@@ -148,10 +148,12 @@ public class SeamCarver {
 
 
         public void removeHorizontalSeam(int[] seam){
-                SeamRemover.removeHorizontalSeam(picture,seam);
+                Picture newpic = new Picture(picture);
+                SeamRemover.removeHorizontalSeam(newpic,seam);
         }   // remove horizontal seam from picture
         public void removeVerticalSeam(int[] seam)  {
-                SeamRemover.removeHorizontalSeam(picture,seam);
+                Picture newpic = new Picture(picture);
+                SeamRemover.removeHorizontalSeam(newpic,seam);
         }   // remove vertical seam from picture
 
 
